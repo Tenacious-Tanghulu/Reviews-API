@@ -1,2 +1,2 @@
 # Reviews-API
-hello there
+SDC Schema Revies for now
