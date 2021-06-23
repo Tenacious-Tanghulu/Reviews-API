@@ -31,7 +31,7 @@ CREATE TABLE Review (
   Recommend BOOLEAN NOT NULL,
   Response TEXT NOT NULL,
   Body TEXT  NOT NULL,
-  Date VARCHAR(50) NOT NULL,
+  Posting_date DATE NOT NULL DEFAULT CURRENT_DATE
   Reviewer_name VARCHAR(50) NOT NULL,
   Helpfulness INT NOT NULL,
   id_Product INT NOT NULL,
