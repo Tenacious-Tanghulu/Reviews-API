@@ -5,11 +5,15 @@
   "main": "model.js",
   "dependencies": {
     "express": "^4.17.1",
-    "pg": "^8.6.0"
+    "pg": "^8.6.0",
+    "underscore": "^1.13.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon Server/server.js",
+    "seed": " psql -U evansding -d products -f schema.sql",
+    "update": " psql -U evansding -d products -f tempschema.sql"
   },
   "repository": {
     "type": "git",

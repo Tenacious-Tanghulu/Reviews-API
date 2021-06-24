@@ -2,11 +2,9 @@ const mongoose = require('mongoose');
 const db = require('./mongo.js');
 
 
-const listSchema = new mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
   product: Number,
-  page: Number,
-  count: Number,
-  results: [
+  reviews: [
     {
       review_id: Number,
       rating: Number,
@@ -28,7 +26,7 @@ const listSchema = new mongoose.Schema({
 
       ]
     }
-  ]
+  ],
   ratings: {
     "1": Number,
     "2": Number,
@@ -39,6 +37,7 @@ const listSchema = new mongoose.Schema({
     recommend: Number
 
   },
+  //an array of options
   characteristics: {
     Size: {
       id: Number,

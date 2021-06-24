@@ -6,13 +6,6 @@ const _ = require('underscore');
 
 var dataDir = path.join(__dirname, 'reviews.csv');
 
-// copy review(id_Review, id_product,rating,date,summary,body,recommend,reported,reviewer_name,reviewer_email,response,helpfulness
-//   ) from '/Users/evansding/Desktop/hackreactor precourse/SDC/Reviews SDC/data/reviews.csv' delimiter ',' CSV header;
-
-  copy product(id_product) from '/Users/evansding/Desktop/hackreactor precourse/SDC/Reviews SDC/data/reviews.csv' delimiter ',' CSV header;
-
-
-
 
 module.exports = {
 
