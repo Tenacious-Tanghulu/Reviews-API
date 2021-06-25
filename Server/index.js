@@ -1,9 +1,12 @@
 const { Client } = require('pg');
+const { Pool } = require('pg');
+const password = require('../config.js')
 
 const client = new Client({
+  host: 'localhost',
   user: 'evansding',
-  database: 'backup',
-  password: 'password'
+  database: 'products',
+  password: `${password}`
 });
 
 client.connect((err) => {
@@ -13,3 +16,7 @@ client.connect((err) => {
     console.log('connected to postgres!');
   }
 })
+
+module.exports = {
+  db: client
+}

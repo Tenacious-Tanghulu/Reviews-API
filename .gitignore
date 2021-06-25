@@ -27,4 +27,4 @@ data/reviews.csv
 data/reviews_photos.csv
 data/characteristics.csv
 data/characteristic_reviews.csv
-
+config.js

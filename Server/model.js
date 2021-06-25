@@ -1,16 +1,29 @@
 const client = require('./index.js');
+const sorter = require('./sorter.js');
 
 module.exports = {
-  get: (callback) => {
-    client.query('SELECT * from review;', (err, res) => {
+  getAll: (id, page = 1, count = 5, sort = 'newest', callback) => {
+    console.log('info in model', id)
+    client.db.query(`SELECT review.* from review where id_product=${id}`, (err, res) => {
       if(err) {
-        console.log('error');
+        callback(err);
       } else {
-        console.log('this is response: ', res);
+        callback(null, res);
       }
     })
+  },
+
+  post: () => {
+
   }
 }
+
+
+
+
+
+//module.exports.getAll(console.log);
+
 
 
 

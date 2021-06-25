@@ -1,9 +1,21 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3000;
+const model = require('./model.js');
+
+
+app.use(express.json());
 
 app.get('/reviews', (req, res) => {
-  res.send('Here are the reviews!')
+  //console.log(req.query);
+  const {product_id, page, count, sort} = req.query;
+  model.getAll(product_id, page, count, sort, (err, data) => {
+    if(err) {
+      res.status(404).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  })
 })
 
 app.get('/reviews/meta', (req, res) => {
