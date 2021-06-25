@@ -135,3 +135,12 @@ CREATE TABLE Characteristic_Review (
 -- ('','','');
 -- INSERT INTO Characteristics (id,Description,Value,Review_id) VALUES
 -- ('','','','');
+
+
+--try this to index !!!!!
+create index idx_review_product on review(id_product);--why do indexes help you search faster?
+
+create index idx_product_characteristic on characteristics(id_product);
+
+create index idx_characteristic on characteristic_review(id_Characteristics);
+

@@ -16,7 +16,7 @@ module.exports = {
     } else if(sort === 'helpfulness') {
       allReviews = _.sortBy(res.rows, "helpfulness").reverse();
     } else {
-      //this doesnt work, need to ask about
+      //this doesnt work, need to ask about how to write algo
       allReviews = _.sortBy(_.sortBy(res.rows, "date").reverse(), "helpfulness").reverse();
     }
 
@@ -29,8 +29,9 @@ module.exports = {
     }
 
     if(count < allReviews.length) {
-      //check page we are on
+      //adds extra space on end of length to allow for not-perfect multiples of pages
       var mod = allReviews.length % count;
+      //check page we are on
       var current = 1;
       //console.log('length: ', allReviews.length, 'count', count);
       console.log('mod: ', allReviews.length + mod + 1);
@@ -39,18 +40,12 @@ module.exports = {
 
         var currentPage = allReviews.slice(j, index);
 
-        console.log('one page', index);
         book[current] = currentPage;
         current += 1;
       }
 
       console.log('book: ', book);
     }
-
-
-
-
-    //console.log('this is sorted reviews', presentedReviews);
 
     var result = {
       'product': id,
@@ -62,6 +57,45 @@ module.exports = {
     return result;
 
 
+  },
+
+  sortMeta: (res) => {
+    var result = {};
+    var id = '';
+    var ratings = {};
+    var characteristics = {};
+    var count = {};
+    var charId = {};
+
+
+    res.rows.map((data) => {
+      //iterate through data and format it correctly
+      id = data.id_product;
+      ratings[data.score] = (ratings[data.score] ?? 0) + 1;
+      var number = JSON.parse(data.score);
+      characteristics[data.description] = (ratings[data.score] ?? 0) + number;
+      //keep track of how many times a data has been here
+      count[data.description + ' count'] = (ratings[data.score] ?? 0) + 1;
+      charId[data.description] = data.id_characteristics;
+    });
+
+    for(var keys in characteristics) {
+      //get the average of a particular description by dividing itself by its key + count
+      characteristics[keys]  = Math.round(characteristics[keys] / count[keys + ' count'] * 100) / 100;
+    }
+
+    for(var keys in characteristics) {
+      characteristics[keys] = {
+        "id": charId[keys],
+        "value": characteristics[keys]
+      }
+    }
+
+    result.product_id = id;
+    result.ratings = ratings;
+    result.characteristics = characteristics;
+
+    return result;
   }
 
 
