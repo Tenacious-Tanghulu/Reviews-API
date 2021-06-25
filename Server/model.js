@@ -9,9 +9,9 @@ module.exports = {
         callback(err);
       } else {
         //applies queries to response and sorts it
-        //sorter.sort(id, page, count, sort, res)
+        var response = sorter.sort(id, page, count, sort, res)
 
-        callback(null, res);
+        callback(null, response);
       }
     })
   },
