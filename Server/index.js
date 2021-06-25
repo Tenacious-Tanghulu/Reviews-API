@@ -9,6 +9,7 @@ const client = new Client({
   password: `${password}`
 });
 
+
 client.connect((err) => {
   if(err) {
     console.log('error');

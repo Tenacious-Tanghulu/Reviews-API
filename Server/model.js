@@ -8,6 +8,9 @@ module.exports = {
       if(err) {
         callback(err);
       } else {
+        //applies queries to response and sorts it
+        //sorter.sort(id, page, count, sort, res)
+
         callback(null, res);
       }
     })
