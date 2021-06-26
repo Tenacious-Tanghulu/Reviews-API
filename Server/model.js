@@ -1,7 +1,7 @@
 const client = require('./index.js');
 const sorter = require('./sorter.js');
 
-const metaquery1 = `SELECT characteristics.id_product, characteristic_review.score, characteristic_review.id_characteristics, characteristics.description FROM characteristics, characteristic_review WHERE characteristics.id_product = 1 AND characteristic_review.id_characteristics = characteristics.id_characteristics;`
+
 
 // client.db.query(`SELECT score FROM characteristic_review INNER JOIN characteristic_review ON id_Characteristics = (select id_characteristics from characteristics where id_product = 1)`)
 
@@ -22,6 +22,7 @@ module.exports = {
 
   getMeta: (id, callback) => {
 
+    const metaquery1 = `SELECT characteristics.id_product, characteristic_review.score, characteristic_review.id_characteristics, characteristics.description FROM characteristics, characteristic_review WHERE characteristics.id_product = ${id} AND characteristic_review.id_characteristics = characteristics.id_characteristics;`
 
     client.db.query(`${metaquery1}`, (err, res) => {
       if(err) {
@@ -31,43 +32,46 @@ module.exports = {
         callback(response);
       }
     })
-
-    // client.db.query(`select * from characteristics where id_product = ${id}`, (err, res) => {
-    //   if(err) {
-    //     callback(err);
-    //   } else {
-    //     var charArray = sorter.sortMeta(res);
-    //     //console.log(charArray);
-    //     for(var i = 0; i < charArray.length; i++) {
-    //       //console.log('this is charArray in outside', charArray[i]);
-    //       var description = charArray[i].description;
-    //       //console.log(description);
-    //       client.db.query(`select * from characteristic_review where id_characteristics = ${charArray[i].id_characteristics}`, (err, res1) => {
-    //         if(err) {
-    //           callback(err);
-    //         } else {
-    //           callback(res.rows[i]);
-    //         }
-    //       })
-
-    //     }
-    //   }
-
-    // })
-
-
   },
 
-  post: () => {
+  post: (info, callback) => {
 
+    const {product_id, rating, summary, recommend, body, name, email, photo, characteristics, photos} = info;
+    console.log(product_id, rating, summary, recommend, body, name, email);
+    const metaquery = `INSERT INTO Review (
+      id_product, rating, summary, recommend, body, reviewer_name, reviewer_email, reported, helpfulness, response, date) VALUES (${product_id}, ${rating}, '${summary}', ${recommend}, '${body}', '${name}', '${email}', ${false}, ${0}, 'this is a response', NOW()) RETURNING Review_id;`;
+
+    const innerquery = `INSERT INTO Characteristic_Review (Review_id, Score, id_Chracteristics) VALUES (${res.rows[0].review_id}, ) VALUES ()`
+
+      //need to change helpfullness to be able to be null
+
+    client.db.query(`${metaquery}`, (err, res) => {
+      if(err) {
+        console.log(err);
+        callback(err);
+      } else {
+        // console.log('success!', res.rows[0]);
+        // callback(null, res.rows[0]);
+        client.db.query(`INSERT INTO Photos (Review_id, url) VALUES (${res.rows[0].review_id}, '${photos[0]}');`, (err, res1) => {
+          if(err) {
+            console.log(err);
+            callback(err);
+          } else {
+            console.log('success!');
+            callback(null, res, res1);
+          }
+        })
+      }
+    })
   }
 }
 
+// INSERT INTO Review (
+//   id_product, rating, summary, recommend, body, reviewer_name, reviewer_email, reported, helpfulness, response, date) VALUES (5, 1, 'ddknlnfdsfdf', false, 'Dolorem ut facere nemo doloremque corporis illum sit. Officia fuga in deserunt numquam illum in sed ut. Cupiditate cum et rerum dolore. Sed qui et. Sit aliquam eveniet sunt placeat natus.' , 'evansding', 'dinger@something.com', false, 7, 'this is a response', NOW());
 
 
 
-
-module.exports.getMeta(1, console.log);
+//module.exports.getMeta(25167, console.log);
 
 
 

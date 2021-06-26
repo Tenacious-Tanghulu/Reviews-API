@@ -19,11 +19,25 @@ app.get('/reviews', (req, res) => {
 })
 
 app.get('/reviews/meta', (req, res) => {
-  res.send('Here is the metadata!')
+  const {product_id} = req.query;
+  model.getMeta(product_id, (err, data) => {
+    if(err) {
+      res.status(404).send(err)
+    } else {
+      res.status(200).send(data);
+    }
+  })
 })
 
 app.post('/reviews', (req, res) => {
-  res.send('Posting reviews!')
+  model.post(req.body, (err, data) => {
+    if(err) {
+      res.status(404).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  })
+   console.log('this is post request body', req.body);
 })
 
 app.post('/reviews/report', (req, res) => {

@@ -60,10 +60,19 @@ module.exports = {
   },
 
   sortMeta: (res) => {
+    //final output
     var result = {};
+
+    //current id
     var id = '';
+
+    //ratings object
     var ratings = {};
+
+    //characteristics object
     var characteristics = {};
+
+    //count to divide ratings by
     var count = {};
     var charId = {};
 
@@ -81,19 +90,28 @@ module.exports = {
 
     for(var keys in characteristics) {
       //get the average of a particular description by dividing itself by its key + count
-      characteristics[keys]  = Math.round(characteristics[keys] / count[keys + ' count'] * 100) / 100;
+      characteristics[keys]  = characteristics[keys] / count[keys + ' count'];
     }
 
     for(var keys in characteristics) {
       characteristics[keys] = {
         "id": charId[keys],
-        "value": characteristics[keys]
+        "value": JSON.stringify(characteristics[keys])
       }
     }
 
-    result.product_id = id;
-    result.ratings = ratings;
-    result.characteristics = characteristics;
+
+    //make everything  a string for some reason they want that
+    for(var keys in ratings) {
+      ratings[keys] = JSON.stringify(ratings[keys]);
+    }
+
+    result = {
+      "product_id": JSON.stringify(id),
+      "ratings": ratings,
+      "characteristics": characteristics
+    }
+
 
     return result;
   }

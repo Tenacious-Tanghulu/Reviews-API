@@ -104,5 +104,14 @@ COPY Characteristic_Review(id_Characteristic_Review, id_Characteristics, Review_
 -- ALTER TABLE Product_Characteristic ADD FOREIGN KEY (id_Characteristics) REFERENCES Characteristics(id_Characteristics);
 
 
+--try this to index !!!!!
+create index idx_review_product on review(id_product);--why do indexes help you search faster?
+
+create index idx_product_characteristic on characteristics(id_product);
+
+create index idx_characteristic on characteristic_review(id_Characteristics);
+
+
+
 
 
