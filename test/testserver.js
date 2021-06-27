@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express();
-const model = require('./model.js');
-const port = 3000;
+const model = require('../Server/model.js');
+
 
 
 app.use(express.json());
@@ -64,10 +64,6 @@ app.put('/reviews/report', async (req, res) => {
 })
 
 
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
 
 module.exports = app;
 

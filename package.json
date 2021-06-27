@@ -8,12 +8,17 @@
     "pg": "^8.6.0",
     "underscore": "^1.13.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^27.0.5",
+    "supertest": "^6.1.3"
+  },
   "scripts": {
     "test": "k6 run k6test.js",
     "start": "nodemon Server/server.js",
     "seed": " psql -U evansding -d products -f schema.sql",
-    "update": " psql -U evansding -d products -f tempschema.sql"
+    "update": " psql -U evansding -d products -f tempschema.sql",
+    "jest": "jest",
+    "jest:watch": "jest --watch"
   },
   "repository": {
     "type": "git",

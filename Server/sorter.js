@@ -34,7 +34,7 @@ module.exports = {
       //check page we are on
       var current = 1;
       //console.log('length: ', allReviews.length, 'count', count);
-      console.log('mod: ', allReviews.length + mod + 1);
+      //console.log('mod: ', allReviews.length + mod + 1);
       for(var j = 0; j < allReviews.length + mod + 1; j += count) {
         var index = j + count;
 
@@ -44,7 +44,7 @@ module.exports = {
         current += 1;
       }
 
-      console.log('book: ', book);
+      //console.log('book: ', book);
     }
 
     var result = {

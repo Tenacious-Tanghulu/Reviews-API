@@ -7,7 +7,7 @@ const sorter = require('./sorter.js');
 
 module.exports = {
   getAll: (id, page = 1, count = 5, sort = 'newest', callback) => {
-    console.log('info in model', id)
+    //console.log('info in model', id)
     client.db.query(`SELECT * from review where id_product=${id}`, (err, res) => {
       if(err) {
         callback(err);

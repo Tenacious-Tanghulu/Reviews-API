@@ -6,6 +6,7 @@ const client = new Client({
   host: 'localhost',
   user: 'evansding',
   database: 'products',
+  port: 5432,
   password: `${password}`
 });
 
