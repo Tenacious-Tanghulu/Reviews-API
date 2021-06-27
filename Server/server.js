@@ -40,8 +40,27 @@ app.post('/reviews', (req, res) => {
    console.log('this is post request body', req.body);
 })
 
-app.post('/reviews/report', (req, res) => {
-  res.send('reporting reviews!')
+app.put('/reviews/helpful', async (req, res) => {
+  const {review_id} = req.query;
+  try{
+    const results = model.putHelp(review_id);
+    res.sendStatus(204);
+  } catch(err) {
+    console.log(err);
+    res.sendStatus(404);
+  }
+})
+
+app.put('/reviews/report', async (req, res) => {
+  const {review_id} = req.query;
+  try{
+    const results = await model.report(review_id);
+    console.log(results);
+    res.status(204).send(results);
+  } catch(err) {
+    console.log(err);
+    res.sendStatus(404);
+  }
 })
 
 

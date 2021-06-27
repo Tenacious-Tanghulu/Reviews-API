@@ -37,11 +37,9 @@ module.exports = {
   post: (info, callback) => {
 
     const {product_id, rating, summary, recommend, body, name, email, photo, characteristics, photos} = info;
-    console.log(product_id, rating, summary, recommend, body, name, email);
+    //console.log(product_id, rating, summary, recommend, body, name, email);
     const metaquery = `INSERT INTO Review (
       id_product, rating, summary, recommend, body, reviewer_name, reviewer_email, reported, helpfulness, response, date) VALUES (${product_id}, ${rating}, '${summary}', ${recommend}, '${body}', '${name}', '${email}', ${false}, ${0}, 'this is a response', NOW()) RETURNING Review_id;`;
-
-    const innerquery = `INSERT INTO Characteristic_Review (Review_id, Score, id_Chracteristics) VALUES (${res.rows[0].review_id}, ) VALUES ()`
 
       //need to change helpfullness to be able to be null
 
@@ -57,19 +55,59 @@ module.exports = {
             console.log(err);
             callback(err);
           } else {
-            console.log('success!');
-            callback(null, res, res1);
+            //console.log('success1!');
+            for(var keys in characteristics) {
+              //console.log(res.rows[0].review_id);
+              var innerquery = `INSERT INTO Characteristic_Review (Review_id, Score, id_Characteristics) VALUES (${res.rows[0].review_id}, ${characteristics[keys]}, '${keys}');`;
+
+              client.db.query(`${innerquery}`,  (err, res2) => {
+                if(err) {
+                  console.log(err);
+                  callback(err);
+                } else {
+                  console.log('success 2');
+                }
+              })
+            }
           }
         })
       }
+      callback(null, res);
     })
+  },
+
+putHelp: async (id) => {
+  //console.log('asynced callback? ', id)
+  try{
+    var result = await client.db.query(`UPDATE Review SET Helpfulness = Helpfulness + 1
+    WHERE Review_id = ${id} RETURNING Helpfulness;`);
+    console.log(result);
+    //return result.rows.helpfulness;
+  } catch(err) {
+    console.log(err);
   }
+},
+
+report: async(id) => {
+  try{
+    var result = await client.db.query(`UPDATE Review SET Reported = True
+    WHERE Review_id = ${id} RETURNING Reported;`);
+    //console.log(result);
+    return result.fields[0].name;
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+
+
+
 }
 
 // INSERT INTO Review (
 //   id_product, rating, summary, recommend, body, reviewer_name, reviewer_email, reported, helpfulness, response, date) VALUES (5, 1, 'ddknlnfdsfdf', false, 'Dolorem ut facere nemo doloremque corporis illum sit. Officia fuga in deserunt numquam illum in sed ut. Cupiditate cum et rerum dolore. Sed qui et. Sit aliquam eveniet sunt placeat natus.' , 'evansding', 'dinger@something.com', false, 7, 'this is a response', NOW());
 
-
+// INSERT INTO Characteristic_Review (Review_id, Score, id_Characteristics) VALUES (5774956, 4, '84504');
 
 //module.exports.getMeta(25167, console.log);
 

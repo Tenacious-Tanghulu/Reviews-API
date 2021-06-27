@@ -10,7 +10,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "k6 run k6test.js",
     "start": "nodemon Server/server.js",
     "seed": " psql -U evansding -d products -f schema.sql",
     "update": " psql -U evansding -d products -f tempschema.sql"
