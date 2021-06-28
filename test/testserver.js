@@ -6,16 +6,22 @@ const model = require('../Server/model.js');
 
 app.use(express.json());
 
-app.get('/reviews', (req, res) => {
+app.get('/reviews', async (req, res) => {
   //console.log(req.query);
   const {product_id, page, count, sort} = req.query;
-  model.getAll(product_id, page, count, sort, (err, data) => {
-    if(err) {
-      res.status(404).send(err);
-    } else {
-      res.status(200).send(data);
-    }
-  })
+  const results = await model.getAll(product_id, page, count, sort)
+  try {
+    res.status(200).send(results)
+  } catch(err) {
+    res.status(404).send(err);
+  }
+  // model.getAll(product_id, page, count, sort, (err, data) => {
+  //   if(err) {
+  //     res.status(404).send(err);
+  //   } else {
+  //     res.status(200).send(data);
+  //   }
+  // })
 })
 
 app.get('/reviews/meta', (req, res) => {
@@ -29,15 +35,14 @@ app.get('/reviews/meta', (req, res) => {
   })
 })
 
-app.post('/reviews', (req, res) => {
-  model.post(req.body, (err, data) => {
-    if(err) {
-      res.status(404).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  })
-   console.log('this is post request body', req.body);
+app.post('/reviews', async (req, res) => {
+
+  try {
+    const results = await model.post(req.body);
+    res.status(201).send(results);
+  } catch(err) {
+    res.status(404).send(err);
+  }
 })
 
 app.put('/reviews/helpful', async (req, res) => {
@@ -64,6 +69,10 @@ app.put('/reviews/report', async (req, res) => {
 })
 
 
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
 
 module.exports = app;
 

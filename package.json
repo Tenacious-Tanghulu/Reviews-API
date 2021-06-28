@@ -13,7 +13,7 @@
     "supertest": "^6.1.3"
   },
   "scripts": {
-    "test": "k6 run k6test.js",
+    "test": "k6 run k6/get.js",
     "start": "nodemon Server/server.js",
     "seed": " psql -U evansding -d products -f schema.sql",
     "update": " psql -U evansding -d products -f tempschema.sql",

@@ -9,7 +9,9 @@ module.exports = {
   getAll: async (id, page = 1, count = 5, sort = 'newest') => {
     //console.log('info in model', id)
     try {
-      var data = await client.db.query(`SELECT * from review WHERE id_product = ${id};`);
+
+      let offset = (page - 1) * count;
+      var data = await client.db.query(`SELECT * from review WHERE id_product = ${id} LIMIT ${count} OFFSET ${offset};`);
 
       var reviews = data.rows;
 
@@ -19,8 +21,10 @@ module.exports = {
         return data2;
       }))
 
+
+
       //sort everything in array
-      var response = sorter.sort(id, page, count, sort, data, photo[0].rows);
+      var response = sorter.sort(id, page, count, sort, data, photo[0]|| []);
 
       return response;
 
@@ -91,7 +95,7 @@ putHelp: async (id) => {
   try{
     var result = await client.db.query(`UPDATE Review SET Helpfulness = Helpfulness + 1
     WHERE Review_id = ${id} RETURNING Helpfulness;`);
-    console.log(result);
+
     //return result.rows.helpfulness;
   } catch(err) {
     console.log(err);

@@ -13,9 +13,12 @@ module.exports = {
     var book = {};
 
     //add photo property into review object
-    res.rows.map((data) => {
-      data.photos = photo;
-    })
+
+      res.rows.map((data) => {
+        data.photos = photo.rows;
+      })
+
+
 
     if(sort === 'newest') {
       allReviews = _.sortBy(res.rows, "date").reverse();
@@ -26,39 +29,39 @@ module.exports = {
       allReviews = _.sortBy(_.sortBy(res.rows, "date").reverse(), "helpfulness").reverse();
     }
 
-    console.log(allReviews);
+    //console.log(allReviews);
 
-    var presentedReviews = []; //this contains the page with the reviews
-    for(var i = 0; i < count; i++) {
-      if(allReviews[i] !== undefined) {
-        presentedReviews.push(allReviews[i]);
-      }
-    }
+    // var presentedReviews = []; //this contains the page with the reviews
+    // for(var i = 0; i < count; i++) {
+    //   if(allReviews[i] !== undefined) {
+    //     presentedReviews.push(allReviews[i]);
+    //   }
+    // }
 
-    if(count < allReviews.length) {
-      //adds extra space on end of length to allow for not-perfect multiples of pages
-      var mod = allReviews.length % count;
-      //check page we are on
-      var current = 1;
-      //console.log('length: ', allReviews.length, 'count', count);
-      //console.log('mod: ', allReviews.length + mod + 1);
-      for(var j = 0; j < allReviews.length + mod + 1; j += count) {
-        var index = j + count;
+    // if(count < allReviews.length) {
+    //   //adds extra space on end of length to allow for not-perfect multiples of pages
+    //   var mod = allReviews.length % count;
+    //   //check page we are on
+    //   var current = 1;
+    //   //console.log('length: ', allReviews.length, 'count', count);
+    //   //console.log('mod: ', allReviews.length + mod + 1);
+    //   for(var j = 0; j < allReviews.length + mod + 1; j += count) {
+    //     var index = j + count;
 
-        var currentPage = allReviews.slice(j, index);
+    //     var currentPage = allReviews.slice(j, index);
 
-        book[current] = currentPage;
-        current += 1;
-      }
+    //     book[current] = currentPage;
+    //     current += 1;
+    //   }
 
-      //console.log('book: ', book);
-    }
+    //   //console.log('book: ', book);
+    // }
 
     var result = {
       'product': id,
       'page': page,
       'count': count,
-      'results': book[page] || presentedReviews
+      'results': res.rows
 
     };
 
