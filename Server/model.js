@@ -6,18 +6,40 @@ const sorter = require('./sorter.js');
 // client.db.query(`SELECT score FROM characteristic_review INNER JOIN characteristic_review ON id_Characteristics = (select id_characteristics from characteristics where id_product = 1)`)
 
 module.exports = {
-  getAll: (id, page = 1, count = 5, sort = 'newest', callback) => {
+  getAll: async (id, page = 1, count = 5, sort = 'newest') => {
     //console.log('info in model', id)
-    client.db.query(`SELECT * from review where id_product=${id}`, (err, res) => {
-      if(err) {
-        callback(err);
-      } else {
-        //applies queries to response and sorts it
-        var response = sorter.sort(id, page, count, sort, res)
+    try {
+      var data = await client.db.query(`SELECT * from review WHERE id_product = ${id};`);
 
-        callback(null, response);
-      }
-    })
+      var reviews = data.rows;
+
+      //extract photos from the particular review
+      let photo = await Promise.all(reviews.map(async (object) => {
+        var data2 = client.db.query(`SELECT url from photos where Review_id=${object.review_id}`);
+        return data2;
+      }))
+
+      //sort everything in array
+      var response = sorter.sort(id, page, count, sort, data, photo[0].rows);
+
+      return response;
+
+    } catch(err) {
+      console.log(err);
+    }
+
+
+
+    // client.db.query(`SELECT * from review where id_product=${id}`, (err, res) => {
+    //   if(err) {
+    //     callback(err);
+    //   } else {
+    //     //applies queries to response and sorts it
+    //     var response = sorter.sort(id, page, count, sort, res)
+
+    //     callback(null, response);
+    //   }
+    // })
   },
 
   getMeta: (id, callback) => {
@@ -34,7 +56,7 @@ module.exports = {
     })
   },
 
-  post: (info, callback) => {
+  post: async (info) => {
 
     const {product_id, rating, summary, recommend, body, name, email, photo, characteristics, photos} = info;
     //console.log(product_id, rating, summary, recommend, body, name, email);
@@ -43,37 +65,25 @@ module.exports = {
 
       //need to change helpfullness to be able to be null
 
-    client.db.query(`${metaquery}`, (err, res) => {
-      if(err) {
-        console.log(err);
-        callback(err);
-      } else {
-        // console.log('success!', res.rows[0]);
-        // callback(null, res.rows[0]);
-        client.db.query(`INSERT INTO Photos (Review_id, url) VALUES (${res.rows[0].review_id}, '${photos[0]}');`, (err, res1) => {
-          if(err) {
-            console.log(err);
-            callback(err);
-          } else {
-            //console.log('success1!');
-            for(var keys in characteristics) {
-              //console.log(res.rows[0].review_id);
-              var innerquery = `INSERT INTO Characteristic_Review (Review_id, Score, id_Characteristics) VALUES (${res.rows[0].review_id}, ${characteristics[keys]}, '${keys}');`;
+    let data = await client.db.query(`${metaquery}`);
+    //console.log(data);
 
-              client.db.query(`${innerquery}`,  (err, res2) => {
-                if(err) {
-                  console.log(err);
-                  callback(err);
-                } else {
-                  console.log('success 2');
-                }
-              })
-            }
-          }
-        })
-      }
-      callback(null, res);
-    })
+    let data2 = await client.db.query(`INSERT INTO Photos (Review_id, url) VALUES (${data.rows[0].review_id}, '${photos[0]}') RETURNING url;`);
+
+    let data3Array = [];
+
+    for(var keys in characteristics) {
+      var innerquery = `INSERT INTO Characteristic_Review (Review_id, Score, id_Characteristics) VALUES (${data.rows[0].review_id}, ${characteristics[keys]}, '${keys}') RETURNING Score;`;
+      let data3 = await client.db.query(`${innerquery}`);
+      data3Array.push(data3.rows[0]);
+    }
+
+    return {
+      reviewInsert: data.rows[0],
+      photosInsert: data2.rows[0] || [],
+      charInsert: data3Array
+    }
+
   },
 
 putHelp: async (id) => {
@@ -88,7 +98,7 @@ putHelp: async (id) => {
   }
 },
 
-report: async(id) => {
+report: async (id) => {
   try{
     var result = await client.db.query(`UPDATE Review SET Reported = True
     WHERE Review_id = ${id} RETURNING Reported;`);
