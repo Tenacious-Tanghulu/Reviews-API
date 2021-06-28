@@ -4,12 +4,18 @@ const _ = require('underscore');
 
 
 module.exports = {
-  sort: (id, page, count, sort, res) => {
+  sort: (id, page, count, sort, res, photo) => {
     //returns an object with the mentioned query restrictions
+    //console.log('photo in sorter', photo)
     count = JSON.parse(count);
     var initial = 1;
     var allReviews = [];
     var book = {};
+
+    //add photo property into review object
+    res.rows.map((data) => {
+      data.photos = photo;
+    })
 
     if(sort === 'newest') {
       allReviews = _.sortBy(res.rows, "date").reverse();
@@ -20,6 +26,7 @@ module.exports = {
       allReviews = _.sortBy(_.sortBy(res.rows, "date").reverse(), "helpfulness").reverse();
     }
 
+    console.log(allReviews);
 
     var presentedReviews = []; //this contains the page with the reviews
     for(var i = 0; i < count; i++) {
@@ -52,6 +59,7 @@ module.exports = {
       'page': page,
       'count': count,
       'results': book[page] || presentedReviews
+
     };
 
     return result;
