@@ -29,7 +29,7 @@ module.exports = {
         callback(err);
       } else {
         var response = sorter.sortMeta(res);
-        callback(response);
+        callback(null, response);
       }
     })
   },
