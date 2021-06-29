@@ -30,6 +30,7 @@ module.exports = {
 
     } catch(err) {
       console.log(err);
+      return err;
     }
 
 
@@ -95,10 +96,9 @@ putHelp: async (id) => {
   try{
     var result = await client.db.query(`UPDATE Review SET Helpfulness = Helpfulness + 1
     WHERE Review_id = ${id} RETURNING Helpfulness;`);
-
-    //return result.rows.helpfulness;
+    return result;
   } catch(err) {
-    console.log(err);
+    return err;
   }
 },
 
@@ -109,7 +109,7 @@ report: async (id) => {
     //console.log(result);
     return result.fields[0].name;
   } catch(err) {
-    console.log(err);
+    return err;
   }
 }
 
