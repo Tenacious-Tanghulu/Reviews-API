@@ -15,7 +15,7 @@ export default function () {
 
   let review_id = Math.floor(Math.random() * max) || 1;
 
-  let put = http.put(`http://localhost:3000/reviews/helpful/?=${review_id}`);
+  let put = http.put(`http://localhost:3000/reviews/report/?=${review_id}`);
 
   check(put, {
     'status was 204': (res) => res.status === 204,

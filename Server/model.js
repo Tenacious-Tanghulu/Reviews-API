@@ -29,8 +29,8 @@ module.exports = {
       return response;
 
     } catch(err) {
-      console.log(err);
-      return err;
+
+      throw new Error(err);
     }
 
 
@@ -62,7 +62,7 @@ module.exports = {
   },
 
   post: async (info) => {
-
+  try {
     const {product_id, rating, summary, recommend, body, name, email, photo, characteristics, photos} = info;
     //console.log(product_id, rating, summary, recommend, body, name, email);
     const metaquery = `INSERT INTO Review (
@@ -88,6 +88,9 @@ module.exports = {
       photosInsert: data2.rows[0] || [],
       charInsert: data3Array
     }
+  } catch(err) {
+    throw new Error(err);
+  }
 
   },
 
@@ -98,7 +101,8 @@ putHelp: async (id) => {
     WHERE Review_id = ${id} RETURNING Helpfulness;`);
     return result;
   } catch(err) {
-    return err;
+    // console.log(err);
+    throw new Error();
   }
 },
 
@@ -109,7 +113,7 @@ report: async (id) => {
     //console.log(result);
     return result.fields[0].name;
   } catch(err) {
-    return err;
+    throw new Error();
   }
 }
 

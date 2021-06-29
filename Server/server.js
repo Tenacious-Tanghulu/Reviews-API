@@ -48,13 +48,7 @@ app.post('/reviews', async (req, res) => {
 
 app.put('/reviews/helpful', async (req, res) => {
   const {review_id} = req.query;
-  // await model.putHelp(review_id, (err, data) => {
-  //   if(err) {
-  //     res.sendStatus(404);
-  //   } else {
-  //     res.status(204).send(data);
-  //   }
-  // });
+
   try{
     const results = await model.putHelp(review_id);
     res.status(204).send(results);
@@ -65,7 +59,6 @@ app.put('/reviews/helpful', async (req, res) => {
 
 app.put('/reviews/report', async (req, res) => {
   const {review_id} = req.query;
-  model.report(review_id, );
   try{
     const results = await model.report(review_id);
     res.status(204).send(results);

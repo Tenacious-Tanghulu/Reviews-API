@@ -20,6 +20,9 @@ module.exports = {
 
 
 
+
+
+
     if(sort === 'newest') {
       allReviews = _.sortBy(res.rows, "date").reverse();
     } else if(sort === 'helpfulness') {
