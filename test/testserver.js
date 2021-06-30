@@ -47,11 +47,11 @@ app.post('/reviews', async (req, res) => {
 
 app.put('/reviews/helpful', async (req, res) => {
   const {review_id} = req.query;
+
   try{
-    const results = model.putHelp(review_id);
-    res.sendStatus(204);
+    const results = await model.putHelp(review_id);
+    res.status(204).send(results);
   } catch(err) {
-    console.log(err);
     res.sendStatus(404);
   }
 })
@@ -60,19 +60,13 @@ app.put('/reviews/report', async (req, res) => {
   const {review_id} = req.query;
   try{
     const results = await model.report(review_id);
-    console.log(results);
     res.status(204).send(results);
   } catch(err) {
-    console.log(err);
     res.sendStatus(404);
   }
 })
 
 
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
 
 module.exports = app;
 
