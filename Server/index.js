@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 const password = require('../config.js')
 
 const client = new Client({
-  host: 'localhost',
+  host: '54.176.206.212',
   user: 'evansding',
   database: 'products',
   port: 5432,
@@ -13,7 +13,7 @@ const client = new Client({
 
 client.connect((err) => {
   if(err) {
-    console.log('error');
+    console.log(err);
   } else {
     console.log('connected to postgres!');
   }

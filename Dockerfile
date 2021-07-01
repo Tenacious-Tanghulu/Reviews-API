@@ -14,11 +14,13 @@ COPY . /src/app
 RUN npm install
 RUN npm install nodemon
 RUN npm install express
-RUN sudo apt install git-all
-# RUN git --version
+# RUN sudo apt install git-all
+RUN touch config.js
+RUN git --version
 RUN git clone https://github.com/Tenacious-Tanghulu/Reviews-API.git
-# RUN brew install node
-# RUN apt-get install -y nodejs
+# RUN brew install postgresql
+# RUN brew services start postgresql
+
 
 
 # What port will the container talk to the outside world with once created?

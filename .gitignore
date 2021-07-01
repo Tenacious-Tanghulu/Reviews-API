@@ -9,3 +9,8 @@ config.js
 newrelic.sh
 newrelic_agent.log
 newrelic.js
+Database.pem
+Reviews.pem
+scp.sh
+server.sh
+database.sh
