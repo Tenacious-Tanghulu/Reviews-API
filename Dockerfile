@@ -11,13 +11,14 @@ WORKDIR /src/app
 COPY . /src/app
 
 # Does your app have any dependencies that should be installed?
-RUN npm install
+
 RUN npm install nodemon
 RUN npm install express
+RUN npm install pg
 # RUN sudo apt install git-all
 RUN touch config.js
 RUN git --version
-RUN git clone https://github.com/Tenacious-Tanghulu/Reviews-API.git
+# RUN git clone https://github.com/Tenacious-Tanghulu/Reviews-API.git
 # RUN brew install postgresql
 # RUN brew services start postgresql
 

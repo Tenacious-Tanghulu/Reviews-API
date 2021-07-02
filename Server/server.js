@@ -2,7 +2,7 @@ require('newrelic');
 const express = require('express')
 const app = express();
 const model = require('./model.js');
-const port = 3000;
+const port = 3006;
 
 
 app.use(express.json());
@@ -67,6 +67,9 @@ app.put('/reviews/report', async (req, res) => {
   }
 })
 
+app.get('/loaderio-5a4c17021ddb3fea421de0d1322cb58d.text', (req, res) => {
+  res.send('loaderio-5a4c17021ddb3fea421de0d1322cb58d');
+})
 
 
 app.listen(port, () => {

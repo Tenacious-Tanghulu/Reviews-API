@@ -3,11 +3,11 @@ const { Pool } = require('pg');
 const password = require('../config.js')
 
 const client = new Client({
-  host: 'localhost',
   user: 'evansding',
+  host: `${password.ip}`,
   database: 'products',
-  port: 5432,
-  password: `${password}`
+  password: `${password.password}`,
+  port: 5432
 });
 
 
